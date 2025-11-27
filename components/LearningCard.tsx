@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useContext } from 'react';
-import { MorseChar } from '../types';
+import { MorseChar, CharContent } from '../types';
 import { morseAudio } from '../utils/audioUtils';
 import VisualMnemonic from './VisualMnemonic';
-import { Volume2, ArrowRight, RotateCcw, Lightbulb, Sparkles, ArrowLeft } from 'lucide-react';
+import { Volume2, ArrowRight, RotateCcw, Lightbulb, Sparkles, ArrowLeft, RefreshCw, Undo2, Check } from 'lucide-react';
 import { getCreativeMnemonic } from '../services/geminiService';
 import { LanguageContext } from '../App';
 
@@ -17,13 +17,22 @@ interface LearningCardProps {
 const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, hasPrev }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [aiTip, setAiTip] = useState<string | null>(null);
+  
+  // AI State
+  const [userInput, setUserInput] = useState('');
+  const [generatedResult, setGeneratedResult] = useState<CharContent | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
+  const [isReplaced, setIsReplaced] = useState(false);
   
   const { ui, lang } = useContext(LanguageContext);
 
   // Parse code length for visualization sync
   const codeSymbols = charData.code.split('');
+
+  // Current Display Data (System Default or User Custom)
+  const displayData = isReplaced && generatedResult 
+    ? { ...charData, ...generatedResult } 
+    : charData;
 
   const handlePlay = async () => {
     if (isPlaying) return;
@@ -57,7 +66,10 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
 
   // Reset state when char changes
   useEffect(() => {
-    setAiTip(null);
+    setGeneratedResult(null);
+    setUserInput('');
+    setIsReplaced(false);
+    setLoadingAi(false);
     setActiveIndex(-1);
     setIsPlaying(false);
     
@@ -66,13 +78,26 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
         handlePlay();
     }, 500);
     return () => clearTimeout(timer);
-  }, [charData]);
+  }, [charData.char]);
 
-  const fetchAiTip = async () => {
+  const handleGenerateAi = async () => {
+    if (loadingAi) return;
     setLoadingAi(true);
-    const tip = await getCreativeMnemonic(charData, lang);
-    setAiTip(tip);
+    try {
+        const result = await getCreativeMnemonic(charData, lang, userInput);
+        setGeneratedResult(result);
+    } catch (e) {
+        console.error(e);
+    }
     setLoadingAi(false);
+  };
+
+  const handleReplace = () => {
+    setIsReplaced(true);
+  };
+
+  const handleRestore = () => {
+    setIsReplaced(false);
   };
 
   return (
@@ -95,7 +120,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
         >
             <div className="w-56 h-56 md:w-72 md:h-72 flex items-center justify-center">
                  <VisualMnemonic 
-                    charData={charData} 
+                    charData={displayData} 
                     isActive={isPlaying} 
                     activeElementIndex={activeIndex} 
                 />
@@ -118,38 +143,80 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
       {/* Right Panel: Content & Controls */}
       <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
         
-        <div>
+        <div className="flex-1 overflow-y-auto pr-1">
             {/* Core Mnemonic */}
-            <div className="mb-6">
-                <h3 className="text-morse-accent text-xs font-bold uppercase tracking-widest mb-2 opacity-80">{ui.card.core}</h3>
-                <div className="text-3xl text-white font-bold tracking-wide mb-3">{charData.mnemonic}</div>
-                <div className="text-morse-muted text-sm leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
-                    {charData.description}
+            <div className="mb-6 relative">
+                <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-morse-accent text-xs font-bold uppercase tracking-widest opacity-80">{ui.card.core}</h3>
+                    {isReplaced && (
+                        <button 
+                            onClick={handleRestore}
+                            className="text-[10px] flex items-center gap-1 text-morse-muted hover:text-white bg-white/5 px-2 py-1 rounded-full transition-colors"
+                        >
+                            <Undo2 size={10} /> {ui.card.ai_btn_restore}
+                        </button>
+                    )}
+                </div>
+                
+                <div className="text-3xl text-white font-bold tracking-wide mb-3 break-words">
+                    {displayData.mnemonic}
+                </div>
+                <div className="text-morse-muted text-sm leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5 relative">
+                    {displayData.description}
+                    {isReplaced && <Sparkles size={14} className="absolute top-2 right-2 text-morse-accent/50" />}
                 </div>
             </div>
 
-            {/* AI Hint Section */}
-            <div className="min-h-[80px]">
-                {!aiTip ? (
+            {/* AI Assistant Section */}
+            <div className="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3 text-indigo-300">
+                    <Lightbulb size={16} />
+                    <span className="text-xs font-bold uppercase tracking-wider">{ui.card.ai_title}</span>
+                </div>
+                
+                <div className="flex gap-2 mb-3">
+                    <input 
+                        type="text" 
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        placeholder={ui.card.ai_placeholder}
+                        className="flex-1 bg-black/20 text-indigo-100 text-xs px-3 py-2 rounded-lg border border-indigo-500/20 focus:border-indigo-400 focus:outline-none placeholder:text-indigo-400/30"
+                        onKeyDown={(e) => e.key === 'Enter' && handleGenerateAi()}
+                    />
                     <button 
-                        onClick={fetchAiTip}
+                        onClick={handleGenerateAi}
                         disabled={loadingAi}
-                        className="w-full py-2.5 flex items-center justify-center gap-2 text-xs font-medium text-morse-muted hover:text-morse-accent border border-dashed border-white/10 hover:border-morse-accent/30 rounded-lg hover:bg-morse-accent/5 transition-all"
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg disabled:opacity-50 transition-colors shrink-0"
                     >
-                        <Lightbulb size={14} />
-                        {loadingAi ? ui.card.ai_loading : ui.card.ai_btn}
+                        {loadingAi ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
                     </button>
-                ) : (
-                    <div className="bg-indigo-950/30 border border-indigo-500/20 rounded-lg p-3 animate-fade-in flex gap-3 items-start">
-                        <Lightbulb size={16} className="text-indigo-400 shrink-0 mt-0.5" />
-                        <p className="text-xs text-indigo-100 leading-relaxed">{aiTip}</p>
+                </div>
+
+                {generatedResult && (
+                    <div className="bg-black/30 rounded-lg p-3 border border-indigo-500/20 animate-fade-in">
+                        <div className="text-sm font-bold text-indigo-200 mb-1">{generatedResult.mnemonic}</div>
+                        <p className="text-xs text-indigo-300/80 leading-relaxed mb-3">{generatedResult.description}</p>
+                        
+                        {!isReplaced && (
+                            <button 
+                                onClick={handleReplace}
+                                className="w-full flex items-center justify-center gap-2 text-[10px] font-bold uppercase bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 py-1.5 rounded border border-indigo-500/20 transition-all"
+                            >
+                                <Check size={12} /> {ui.card.ai_btn_replace}
+                            </button>
+                        )}
+                         {isReplaced && (
+                            <div className="w-full text-center text-[10px] text-green-400 py-1.5 flex items-center justify-center gap-1">
+                                <Check size={12} /> Applied
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
         </div>
 
         {/* Action Controls */}
-        <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-4 gap-3">
+        <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-4 gap-3 shrink-0">
              {/* Prev Button */}
              <button 
                 onClick={onPrev}

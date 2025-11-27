@@ -28,8 +28,13 @@ export const ZH_CONTENT = {
     card: {
       visual: '视觉记忆',
       core: '核心助记',
-      ai_btn: '记不住？让 AI 讲个故事',
-      ai_loading: 'AI 正在联想...',
+      ai_title: 'AI 记忆助手',
+      ai_placeholder: '输入你的联想线索 (如: H的摩斯码是House的四个角)...',
+      ai_btn_generate: 'AI 帮你狠狠记',
+      ai_btn_regenerate: '换一个',
+      ai_btn_replace: '替换上方助记',
+      ai_btn_restore: '恢复系统默认',
+      ai_loading: 'AI 正在头脑风暴...',
       next: '下一个',
       prev: '上一个',
       play_sound: '播放声音'
@@ -87,7 +92,7 @@ export const ZH_CONTENT = {
   },
   chars: {
     // Day 1
-    'E': { mnemonic: 'E = Eye (眼睛)', description: 'E 一只眼。E，也是“E（一）个点”。' },
+    'E': { mnemonic: 'E = Easy (容易点)', description: 'E 字母“E” 是摩斯密码中最简单（easy）的字符，其代码仅为一个点（.）快速且容易（easy）发出的短促点音。' },
     'T': { mnemonic: 'T = Table (桌子)', description: 'T 的顶部就是一条平整的长桌面，对应一条长划。' },
     'I': { mnemonic: 'I = Ice (冰)', description: 'I 像一根冰柱，上下两端各凝结着一滴冰珠。冰块融化，“哒哒”落下两滴水。' },
     'M': { mnemonic: 'M = Ma-Ma (妈妈)', description: '喊一声“Ma-Ma”，两个饱满的长音节，刚好对应两段长划。' },
@@ -95,7 +100,7 @@ export const ZH_CONTENT = {
     'N': { mnemonic: 'N = Notification (通知中心)', description: '（-·）仔细看像不像iPhone的刘海屏通知中心状态，-是通知栏，·是摄像头的位置。' },
     'O': { mnemonic: 'O = Oh-My-God (惊叹)', description: '发音 O—M—G—，三个惊讶的长音节，嘴巴张得圆圆的。' },
     'S': { mnemonic: 'S = Snake (蛇)', description: 'S 像一条发出“斯斯斯”声的蛇，弯曲的身体有三个转折点。' },
-    'H': { mnemonic: 'H = Huts (四角屋)', description: 'H 像一个小屋的平面图，四个顶点就是四个点。' },
+    'H': { mnemonic: 'H = Hahahaha (哈哈哈哈)', description: '“H”的发音与“哈（ha）”关联。“哈哈哈哈”恰好是四个短促的音节，每个“哈”字都代表摩斯密码中的一个“点”（.）。' },
     // Day 2
     'D': { mnemonic: 'D = Door (门)', description: '听声音像敲门：咚(长)—哒(短)哒(短)。视觉上：左侧-是门把手，右侧两点分别是锁孔(·)和转轴(·)。' },
     'K': { mnemonic: 'K = Kangaroo (袋鼠)', description: '发音 Kan-ga-roo (—·—)。视觉上：K 像站立的袋鼠。同时 -·- 中间的点是袋鼠的鼻子，两边-是袋鼠的胡须。' },

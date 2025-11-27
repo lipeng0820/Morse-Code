@@ -28,7 +28,12 @@ export const EN_CONTENT = {
     card: {
       visual: 'Visual Memory',
       core: 'Mnemonic',
-      ai_btn: 'Can\'t remember? Ask AI',
+      ai_title: 'AI Memory Assistant',
+      ai_placeholder: 'Enter clues (e.g., likes bananas)...',
+      ai_btn_generate: 'Generate Mnemonic',
+      ai_btn_regenerate: 'Try Another',
+      ai_btn_replace: 'Replace Above',
+      ai_btn_restore: 'Restore Default',
       ai_loading: 'AI is thinking...',
       next: 'Next',
       prev: 'Previous',
@@ -87,10 +92,10 @@ export const EN_CONTENT = {
   },
   chars: {
     // Day 1
-    'E': { mnemonic: 'E = Eye', description: 'One dot, like a single eye. E is the simplest unit.' },
+    'E': { mnemonic: 'E = Easy', description: 'E is notably easy and quick to transmit in Morse code, represented by a single, short dot (.). Its “easy” nature directly corresponds to its single dot code.' },
     'T': { mnemonic: 'T = Table/Top', description: 'A flat top table (-). One dash.' },
     'I': { mnemonic: 'I = Ice', description: 'Two dots (..) like two drips of melting ice.' },
-    'M': { mnemonic: 'M = Motor', description: 'Two long dashes (--) sounding like a revving motor: Vroom-Vroom.' },
+    'M': { mnemonic: 'M = Ma-Ma', description: 'The two long, full syllables in “Ma-Ma”（MOM） directly correspond to the two long dashes (--) that form the Morse code for M.' },
     'A': { mnemonic: 'A = Archery', description: 'Aim (.) then Shoot (-). A steady dot followed by a long arrow.' },
     'N': { mnemonic: 'N = Navy', description: '(-.) Big ship (-) and a small tugboat (.).' },
     'O': { mnemonic: 'O = OMG', description: 'Three long gasps (---): Oh My God!' },
