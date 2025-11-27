@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { MorseChar, MorseCharType } from '../types';
-import { MORSE_DICTIONARY } from '../constants';
+
+import React, { useState, useEffect, useContext } from 'react';
+import { MorseChar } from '../types';
+import { getCharData } from '../utils/contentHelper';
 import { morseAudio } from '../utils/audioUtils';
-import { Volume2, CheckCircle, XCircle, Trophy, ArrowRight, Play, RefreshCw } from 'lucide-react';
+import { Volume2, CheckCircle, XCircle, Trophy, ArrowRight, RefreshCw } from 'lucide-react';
+import { LanguageContext } from '../App';
+import { CHAR_LOGIC } from '../data/visual_config';
 
 interface GameModeProps {
-  characters: string[]; // Keys of characters learned today
+  characters: string[]; 
   onComplete: (score: number, total: number) => void;
 }
 
@@ -18,6 +21,8 @@ interface Question {
 }
 
 const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
+  const { ui, lang } = useContext(LanguageContext);
+  
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -26,12 +31,10 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
 
-  // Initialize Game
   useEffect(() => {
     generateQuestions();
-  }, [characters]);
+  }, [characters, lang]); // Regenerate if language changes (though usually mid-game language switch is rare)
 
-  // Auto-play audio when switching to an audio question
   useEffect(() => {
     if (questions.length > 0 && !showSummary && !isAnswered) {
       const currentQ = questions[currentIndex];
@@ -45,30 +48,24 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
   }, [currentIndex, questions, showSummary, isAnswered]);
 
   const generateQuestions = () => {
-    // Create 10 questions or (2 * count) if count is small
     const qCount = Math.max(5, Math.min(10, characters.length * 2));
     const newQuestions: Question[] = [];
-    const allKeys = Object.keys(MORSE_DICTIONARY);
+    const allKeys = Object.keys(CHAR_LOGIC); // Use visual logic keys
 
     for (let i = 0; i < qCount; i++) {
-      // Pick a random target from TODAY'S characters
       const targetKey = characters[i % characters.length];
-      const target = MORSE_DICTIONARY[targetKey];
+      const target = getCharData(targetKey, lang);
       
-      // Randomize type
       const type: QuestionType = Math.random() > 0.5 ? 'AUDIO' : 'VISUAL';
 
-      // Generate Options (1 correct + 3 wrong)
       const options = [target];
       while (options.length < 4) {
         const randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
-        // Ensure unique options
         if (!options.find(o => o.char === randomKey)) {
-          options.push(MORSE_DICTIONARY[randomKey]);
+          options.push(getCharData(randomKey, lang));
         }
       }
 
-      // Shuffle options
       const shuffledOptions = options.sort(() => Math.random() - 0.5);
 
       newQuestions.push({
@@ -78,7 +75,6 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
       });
     }
 
-    // Shuffle questions order so we don't just loop through the list linearly
     setQuestions(newQuestions.sort(() => Math.random() - 0.5));
   };
 
@@ -97,12 +93,8 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
 
     if (correct) {
       setScore(prev => prev + 1);
-      // Play success sound logic could go here
-    } else {
-      // Play error sound logic could go here
-    }
+    } 
 
-    // Auto advance after short delay
     setTimeout(() => {
       if (currentIndex < questions.length - 1) {
         setCurrentIndex(prev => prev + 1);
@@ -137,8 +129,8 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
             </div>
         </div>
         
-        <h2 className="text-3xl font-bold text-white mb-2">{passed ? "训练完成！" : "继续加油！"}</h2>
-        <p className="text-morse-muted mb-8">本次正确率</p>
+        <h2 className="text-3xl font-bold text-white mb-2">{passed ? ui.game.pass : ui.game.fail}</h2>
+        <p className="text-morse-muted mb-8">{ui.game.accuracy}</p>
         
         <div className="text-6xl font-black text-white mb-8 tracking-tighter">
             {percentage}<span className="text-3xl text-morse-muted/50">%</span>
@@ -149,14 +141,14 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
                 onClick={() => onComplete(score, questions.length)}
                 className="w-full py-4 bg-morse-accent hover:bg-amber-400 text-morse-dark font-bold text-lg rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all flex items-center justify-center gap-2"
             >
-                {passed ? '完成打卡' : '完成并继续'} <ArrowRight size={20} />
+                {passed ? ui.game.finish : ui.game.continue} <ArrowRight size={20} />
             </button>
             
             <button 
                 onClick={restartGame}
                 className="w-full py-4 bg-white/5 hover:bg-white/10 text-morse-muted hover:text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
             >
-                <RefreshCw size={18} /> 再练一次
+                <RefreshCw size={18} /> {ui.game.retry}
             </button>
         </div>
       </div>
@@ -167,12 +159,11 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      {/* Game Header */}
       <div className="flex justify-between items-end mb-6 px-2">
         <div>
-            <h2 className="text-morse-accent font-bold uppercase tracking-widest text-xs mb-1">强化训练</h2>
+            <h2 className="text-morse-accent font-bold uppercase tracking-widest text-xs mb-1">{ui.game.title}</h2>
             <div className="text-white font-bold text-xl">
-                {currentQ.type === 'AUDIO' ? '听音辨位' : '视觉破译'}
+                {currentQ.type === 'AUDIO' ? ui.game.audio_title : ui.game.visual_title}
             </div>
         </div>
         <div className="text-morse-muted font-mono text-sm">
@@ -180,9 +171,7 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
         </div>
       </div>
 
-      {/* Question Card */}
       <div className="bg-morse-card/80 backdrop-blur-xl border border-white/5 rounded-[2rem] shadow-2xl overflow-hidden relative min-h-[400px] flex flex-col">
-        {/* Progress Bar */}
         <div className="w-full h-1 bg-white/5">
             <div 
                 className="h-full bg-morse-accent transition-all duration-300"
@@ -192,7 +181,6 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
 
         <div className="flex-1 flex flex-col items-center justify-center p-8">
             
-            {/* The Stimulus */}
             <div className="mb-10 w-full flex justify-center">
                 {currentQ.type === 'AUDIO' ? (
                     <button 
@@ -216,7 +204,6 @@ const GameMode: React.FC<GameModeProps> = ({ characters, onComplete }) => {
                 )}
             </div>
 
-            {/* Options Grid */}
             <div className="grid grid-cols-2 gap-4 w-full">
                 {currentQ.options.map((option) => {
                     const isSelected = selectedOption === option.char;

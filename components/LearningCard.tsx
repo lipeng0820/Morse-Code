@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useContext } from 'react';
 import { MorseChar } from '../types';
 import { morseAudio } from '../utils/audioUtils';
 import VisualMnemonic from './VisualMnemonic';
 import { Volume2, ArrowRight, RotateCcw, Lightbulb, Sparkles, ArrowLeft } from 'lucide-react';
 import { getCreativeMnemonic } from '../services/geminiService';
+import { LanguageContext } from '../App';
 
 interface LearningCardProps {
   charData: MorseChar;
@@ -17,6 +19,8 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
   const [activeIndex, setActiveIndex] = useState(-1);
   const [aiTip, setAiTip] = useState<string | null>(null);
   const [loadingAi, setLoadingAi] = useState(false);
+  
+  const { ui, lang } = useContext(LanguageContext);
 
   // Parse code length for visualization sync
   const codeSymbols = charData.code.split('');
@@ -66,7 +70,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
 
   const fetchAiTip = async () => {
     setLoadingAi(true);
-    const tip = await getCreativeMnemonic(charData);
+    const tip = await getCreativeMnemonic(charData, lang);
     setAiTip(tip);
     setLoadingAi(false);
   };
@@ -82,7 +86,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
       <div className="flex-1 bg-black/20 p-6 flex flex-col items-center justify-center relative border-b md:border-b-0 md:border-r border-white/5">
          
          <div className="absolute top-4 left-4 text-morse-muted/50 font-mono text-[10px] tracking-widest uppercase flex items-center gap-1">
-            <Sparkles size={10} /> Visual Memory
+            <Sparkles size={10} /> {ui.card.visual}
          </div>
 
          <div 
@@ -117,7 +121,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
         <div>
             {/* Core Mnemonic */}
             <div className="mb-6">
-                <h3 className="text-morse-accent text-xs font-bold uppercase tracking-widest mb-2 opacity-80">核心助记</h3>
+                <h3 className="text-morse-accent text-xs font-bold uppercase tracking-widest mb-2 opacity-80">{ui.card.core}</h3>
                 <div className="text-3xl text-white font-bold tracking-wide mb-3">{charData.mnemonic}</div>
                 <div className="text-morse-muted text-sm leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
                     {charData.description}
@@ -133,7 +137,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
                         className="w-full py-2.5 flex items-center justify-center gap-2 text-xs font-medium text-morse-muted hover:text-morse-accent border border-dashed border-white/10 hover:border-morse-accent/30 rounded-lg hover:bg-morse-accent/5 transition-all"
                     >
                         <Lightbulb size={14} />
-                        {loadingAi ? "AI 正在联想..." : "记不住？让 AI 讲个故事"}
+                        {loadingAi ? ui.card.ai_loading : ui.card.ai_btn}
                     </button>
                 ) : (
                     <div className="bg-indigo-950/30 border border-indigo-500/20 rounded-lg p-3 animate-fade-in flex gap-3 items-start">
@@ -174,7 +178,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
                 onClick={onNext}
                 className="col-span-2 py-3 bg-morse-accent hover:bg-amber-400 text-morse-dark font-bold text-lg rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
             >
-                <span>下一个</span>
+                <span>{ui.card.next}</span>
                 <ArrowRight size={20} />
             </button>
         </div>

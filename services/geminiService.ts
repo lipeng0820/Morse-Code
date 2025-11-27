@@ -1,21 +1,24 @@
+
 import { GoogleGenAI } from "@google/genai";
-import { MorseChar } from "../types";
+import { MorseChar, Language } from "../types";
 
 const initGenAI = () => {
   const apiKey = process.env.API_KEY;
   if (!apiKey) {
-    // Fail silently in init, handle in calls
     return null;
   }
   return new GoogleGenAI({ apiKey });
 };
 
-export const getCreativeMnemonic = async (char: MorseChar): Promise<string> => {
+export const getCreativeMnemonic = async (char: MorseChar, lang: Language): Promise<string> => {
   const ai = initGenAI();
-  if (!ai) return char.description || "发挥想象力，把符号看作画！";
+  const fallback = lang === 'zh' ? "发挥想象力，把符号看作画！" : "Use your imagination!";
+  
+  if (!ai) return char.description || fallback;
 
   try {
-    const prompt = `
+    const prompt = lang === 'zh' 
+    ? `
       帮助学生记忆摩斯密码 "${char.char}"。
       对应的代码是 "${char.code}"。
       现有的助记词是: "${char.mnemonic}"。
@@ -24,6 +27,15 @@ export const getCreativeMnemonic = async (char: MorseChar): Promise<string> => {
       可以使用谐音梗、形状联想或有趣的场景。
       
       只返回这一句话。
+    `
+    : `
+      Help a student memorize Morse code for "${char.char}".
+      The code is "${char.code}".
+      Current mnemonic: "${char.mnemonic}".
+      
+      Generate a short, creative, visual or rhythmic sentence (under 20 words) in English to link the letter to the dots (.) and dashes (-).
+      
+      Return ONLY the sentence.
     `;
 
     const response = await ai.models.generateContent({
@@ -31,41 +43,10 @@ export const getCreativeMnemonic = async (char: MorseChar): Promise<string> => {
       contents: prompt,
     });
 
-    return response.text || "把点想象成星星，把划想象成流星！";
+    return response.text || fallback;
   } catch (error: any) {
-    // Graceful fallback for quota limits or network issues
     console.warn("Gemini API unavailable, using fallback:", error.message);
-    
-    // Fallback logic specific to the error type if needed
-    if (error.status === 429 || error.message?.includes('429')) {
-         return `(AI 额度耗尽) 小贴士：${char.description}`;
-    }
-    
-    return char.description || "观察字母的形状，答案就在其中！";
+    const msg = lang === 'zh' ? "(AI 额度耗尽)" : "(AI Quota Limit)";
+    return `${msg} ${char.description}`;
   }
 };
-
-export const generatePracticeSentence = async (chars: string[]): Promise<string> => {
-    const ai = initGenAI();
-    // Fallback sentence if AI is not available
-    if (!ai) return "SOS E T I M A";
-  
-    try {
-      const charStr = chars.join(", ");
-      const prompt = `
-        Create a simple practice sentence using ONLY these letters: [${charStr}].
-        Keep it short (max 5 words). English words are fine as they are standard for Morse.
-        Return ONLY the sentence.
-      `;
-  
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-      });
-  
-      return response.text || "SOS";
-    } catch (error) {
-      // Quiet fail for practice sentences
-      return "SOS E E T T"; 
-    }
-  };

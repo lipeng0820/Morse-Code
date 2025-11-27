@@ -1,47 +1,56 @@
+
 export enum MorseCharType {
   LETTER = 'LETTER',
   NUMBER = 'NUMBER',
   SYMBOL = 'SYMBOL',
 }
 
+export type Language = 'zh' | 'en';
+
 export interface VisualOverlayConfig {
-  // x, y coordinates (0-100) and rotation for placing dots/dashes on the letter SVG
   elements: Array<{
     type: 'dot' | 'dash';
     x: number;
     y: number;
-    rotation?: number; // degrees
+    rotation?: number;
     scale?: number;
   }>;
 }
 
-export interface MorseChar {
+// Immutable Logic (Code, Type, SVG)
+export interface CharLogic {
   char: string;
   code: string;
   type: MorseCharType;
-  mnemonic: string; // Short memory hook (Chinese)
-  description?: string; // Detailed visual description
-  visualOverlay?: VisualOverlayConfig; // Configuration for the SVG overlay
+  visualOverlay?: VisualOverlayConfig;
 }
+
+// Translatable Content (Mnemonic, Description)
+export interface CharContent {
+  mnemonic: string;
+  description: string;
+}
+
+// Combined Object for Components
+export interface MorseChar extends CharLogic, CharContent {}
 
 export interface DayPlan {
   id: number;
   title: string;
   description: string;
-  characters: string[]; // List of chars to learn this day
+  characters: string[];
 }
 
 export enum AppMode {
   LEARN = 'LEARN',
   PRACTICE = 'PRACTICE',
-  REFERENCE = 'REFERENCE', // New Mode: Knowledge Base
+  REFERENCE = 'REFERENCE',
 }
 
-// Practice Mode Specifics
 export enum PracticeType {
-  VISUAL = 'VISUAL', // See code, type letter
-  AUDIO = 'AUDIO',   // Hear code, type letter
-  WORDS = 'WORDS',   // Hear/See word code, type word
+  VISUAL = 'VISUAL',
+  AUDIO = 'AUDIO',
+  WORDS = 'WORDS',
 }
 
 export interface PracticeWord {
@@ -49,4 +58,13 @@ export interface PracticeWord {
   code: string;
   category: 'ABBR' | 'COMMON' | 'EMERGENCY';
   difficulty: 1 | 2 | 3;
+}
+
+export interface RefItemLogic {
+  label: string;
+  code: string;
+}
+
+export interface RefItem extends RefItemLogic {
+  desc?: string;
 }

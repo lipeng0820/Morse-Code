@@ -1,0 +1,95 @@
+
+import { MorseCharType, CharLogic, RefItemLogic } from '../types';
+
+export const CHAR_LOGIC: Record<string, CharLogic> = {
+  // === Day 1 ===
+  'E': { char: 'E', code: '.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 38, y: 54}] } },
+  'T': { char: 'T', code: '-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 50, y: 29}] } },
+  'I': { char: 'I', code: '..', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 50, y: 30 }, { type: 'dot', x: 50, y: 80 }] } },
+  'M': { char: 'M', code: '--', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 25, y: 50, rotation: 90}, { type: 'dash', x: 75, y: 50, rotation: 90}] } },
+  'A': { char: 'A', code: '.-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 50, y: 30 }, { type: 'dash', x: 50, y: 68 }] } },
+  'N': { char: 'N', code: '-.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 30, y: 50, rotation: 90 }, { type: 'dot', x: 70, y: 80 }] } },
+  'O': { char: 'O', code: '---', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 28, y: 57, rotation: 90 }, { type: 'dash', x: 50, y: 28 }, { type: 'dash', x: 72, y: 57, rotation: 90 }] } },
+  'S': { char: 'S', code: '...', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 65, y: 32 }, { type: 'dot', x: 50, y: 55 }, { type: 'dot', x: 35, y: 80 }] } },
+  'H': { char: 'H', code: '....', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 30, y: 30 }, { type: 'dot', x: 70, y: 30 }, { type: 'dot', x: 30, y: 80 }, { type: 'dot', x: 70, y: 80 }] } },
+
+  // === Day 2 ===
+  'D': { char: 'D', code: '-..', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 33, y: 55, rotation: 90 }, { type: 'dot', x: 65, y: 35 }, { type: 'dot', x: 65, y: 75 }] } },
+  'K': { char: 'K', code: '-.-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 33, y: 40, rotation: 90 }, { type: 'dot', x: 48, y: 55 }, { type: 'dash', x: 66, y: 75, rotation: 59 }] } },
+  'R': { char: 'R', code: '.-.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 35, y: 30 }, { type: 'dash', x: 45, y: 58 }, { type: 'dot', x: 68, y: 80 }] } },
+  'U': { char: 'U', code: '..-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 30, y: 30 }, { type: 'dot', x: 70, y: 30 }, { type: 'dash', x: 50, y: 83 }] } },
+  'W': { char: 'W', code: '.--', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 18, y: 30 }, { type: 'dash', x: 41, y: 55, rotation: -80 }, { type: 'dash', x: 78, y: 55, rotation: -80 }] } },
+  'G': { char: 'G', code: '--.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 50, y: 28 }, { type: 'dash', x: 50, y: 84 }, { type: 'dot', x: 70, y: 58 }] } },
+  'B': { char: 'B', code: '-...', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 34, y: 55, rotation: 90 }, { type: 'dot', x: 65, y: 30 }, { type: 'dot', x: 65, y: 55 }, { type: 'dot', x: 65, y: 80 }] } },
+  'V': { char: 'V', code: '...-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 30, y: 30 }, { type: 'dot', x: 36, y: 55 }, { type: 'dot', x: 45, y: 82 }, { type: 'dash', x: 67, y: 40, rotation: -75 }] } },
+
+  // === Day 3 ===
+  'C': { char: 'C', code: '-.-.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 45, y: 28 }, { type: 'dot', x: 73, y: 28 }, { type: 'dash', x: 45, y: 83 }, { type: 'dot', x: 73, y: 83 }] } },
+  'F': { char: 'F', code: '..-.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 67, y: 27 }, { type: 'dot', x: 38, y: 27 }, { type: 'dash', x: 38, y: 53, rotation: 90 }, { type: 'dot', x: 38, y: 80 }] } },
+  'J': { char: 'J', code: '.---', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 61, y: 13 }, { type: 'dash', x: 61, y: 42, rotation: 90 }, { type: 'dash', x: 59, y: 76, rotation: 120 }, { type: 'dash', x: 30, y: 76, rotation: 30 }] } },
+  'L': { char: 'L', code: '.-..', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 39, y: 28 }, { type: 'dash', x: 39, y: 55, rotation: 90 }, { type: 'dot', x: 39, y: 82 }, { type: 'dot', x: 66, y: 82 }] } },
+  'P': { char: 'P', code: '.--.', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dot', x: 34, y: 13 }, { type: 'dash', x: 34, y: 39, rotation: 90 }, { type: 'dash', x: 34, y: 73, rotation: 90 }, { type: 'dot', x: 34, y: 98 }] } },
+  'Q': { char: 'Q', code: '--.-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 49, y: 27 }, { type: 'dash', x: 72, y: 56, rotation: 90 }, { type: 'dot', x: 50, y: 84 }, { type: 'dash', x: 69, y: 100, rotation: 196 }] } },
+  'X': { char: 'X', code: '-..-', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 33, y: 26, rotation: 62 }, { type: 'dot', x: 45, y: 47 }, { type: 'dot', x: 55, y: 60 }, { type: 'dash', x: 67, y: 83, rotation: 62 }] } },
+  'Y': { char: 'Y', code: '-.--', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 34, y: 32, rotation: 68 }, { type: 'dot', x: 50, y: 53 }, { type: 'dash', x: 50, y: 69 }, { type: 'dash', x: 50, y: 85, rotation: 180 }] } },
+  'Z': { char: 'Z', code: '--..', type: MorseCharType.LETTER, visualOverlay: { elements: [{ type: 'dash', x: 51, y: 28 }, { type: 'dash', x: 50, y: 55, rotation: 304 }, { type: 'dot', x: 34, y: 82 }, { type: 'dot', x: 67, y: 82 }] } },
+};
+
+// Reference Data Logic
+export const REF_LOGIC = {
+  NUMBERS: [
+    { label: '1', code: '.----' },
+    { label: '2', code: '..---' },
+    { label: '3', code: '...--' },
+    { label: '4', code: '....-' },
+    { label: '5', code: '.....' },
+    { label: '6', code: '-....' },
+    { label: '7', code: '--...' },
+    { label: '8', code: '---..' },
+    { label: '9', code: '----.' },
+    { label: '0', code: '-----' },
+  ] as RefItemLogic[],
+  PUNCTUATION: [
+    { label: '.', code: '.-.-.-' }, { label: ',', code: '--..--' }, { label: '?', code: '..--..' },
+    { label: "'", code: '.----.' }, { label: '!', code: '-.-.--' }, { label: '/', code: '-..-.' },
+    { label: '(', code: '-.--.' }, { label: ')', code: '-.--.-' }, { label: '&', code: '.-...' },
+    { label: ':', code: '---...' }, { label: ';', code: '-.-.-.' }, { label: '=', code: '-...-' },
+    { label: '+', code: '.-.-.' }, { label: '-', code: '-....-' }, { label: '_', code: '..--.-' },
+    { label: '"', code: '.-..-.' }, { label: '$', code: '...-..-' }, { label: '@', code: '.--.-.' },
+  ] as RefItemLogic[],
+  PROSIGNS: [
+    { label: 'SOS', code: '...---...' }, { label: 'HH', code: '........' }, { label: 'BT', code: '-...-' },
+    { label: 'AR', code: '.-.-.' }, { label: 'SK', code: '...-.-' }, { label: 'KA', code: '-.-.-' },
+    { label: 'AS', code: '.-...' },
+  ] as RefItemLogic[],
+  ABBR: [
+    { label: 'AA', code: '.- .-' }, { label: 'AB', code: '.- -...' }, { label: 'ABT', code: '.- -... -' },
+    { label: 'ADS', code: '.- -.. ...' }, { label: 'AGN', code: '.- --. -.' }, { label: 'ANT', code: '.- -. -' },
+    { label: 'ARRL', code: '.- .-. .-. .-..' }, { label: 'BN', code: '-... -.' }, { label: 'BUG', code: '-... ..- --.' },
+    { label: 'C', code: '-.-.' }, { label: 'CBA', code: '-.-. -... .-' }, { label: 'CFM', code: '-.-. ..-. --' },
+    { label: 'CLG', code: '-.-. .-.. --.' }, { label: 'CQ', code: '-.-. --.-' }, { label: 'CUL', code: '-.-. ..- .-..' },
+    { label: 'CUZ', code: '-.-. ..- --..' }, { label: 'CW', code: '-.-. .--' }, { label: 'CX', code: '-.-. -..-' },
+    { label: 'CY', code: '-.-. -.--' }, { label: 'DE', code: '-.. .' }, { label: 'DX', code: '-.. -..-' },
+    { label: 'ES', code: '. ...' }, { label: 'FB', code: '..-. -...' }, { label: 'FCC', code: '..-. -.-. -.-.' },
+    { label: 'FER', code: '..-. . .-.' }, { label: 'FREQ', code: '..-. .-. . --.-' }, { label: 'GA', code: '--. .-' },
+    { label: 'GE', code: '--. .' }, { label: 'GM', code: '--. --' }, { label: 'GND', code: '--. -. -..' },
+    { label: 'GUD', code: '--. ..- -..' }, { label: 'HI', code: '.... ..' }, { label: 'HR', code: '.... .-.' },
+    { label: 'HV', code: '.... ...-' }, { label: 'LID', code: '.-.. .. -..' }, { label: 'MILS', code: '-- .. .-.. ...' },
+    { label: 'NIL', code: '-. .. .-..' }, { label: 'NR', code: '-. .-.' }, { label: 'OB', code: '--- -...' },
+    { label: 'OC', code: '--- -.-.' }, { label: 'OM', code: '--- --' }, { label: 'OO', code: '--- ---' },
+    { label: 'OP', code: '--- .--.' }, { label: 'OT', code: '--- -' }, { label: 'OTC', code: '--- - -.-.' },
+    { label: 'PSE', code: '.--. ... .' }, { label: 'PWR', code: '.--. .-- .-.' }, { label: 'R', code: '.-.' },
+    { label: 'RCVR', code: '.-. -.-. ...- .-.' }, { label: 'RPT', code: '.-. .--. -' }, { label: 'RST', code: '.-. ... -' },
+    { label: 'RTTY', code: '.-. - - -.--' }, { label: 'RX', code: '.-. -..-' }, { label: 'SAE', code: '... .- .' },
+    { label: 'SASE', code: '... .- ... .' }, { label: 'SED', code: '... . -..' }, { label: 'SEZ', code: '... . --..' },
+    { label: 'SIG', code: '... .. --.' }, { label: 'SIGS', code: '... .. --. ...' }, { label: 'SKED', code: '... -.- . -..' },
+    { label: 'SN', code: '... -.' }, { label: 'SRI', code: '... .-. ..' }, { label: 'STN', code: '... - -.' },
+    { label: 'TEMP', code: '- . -- .--.' }, { label: 'TMW', code: '- -- .--' }, { label: 'TNX', code: '- -. -..-' },
+    { label: 'TU', code: '- ..-' }, { label: 'TX', code: '- -..-' }, { label: 'U', code: '..-' },
+    { label: 'UR', code: '..- .-.' }, { label: 'URS', code: '..- .-. ...' }, { label: 'VY', code: '...- -.--' },
+    { label: 'WDS', code: '.-- -.. ...' }, { label: 'WKD', code: '.-- -.- -..' }, { label: 'WL', code: '.-- .-..' },
+    { label: 'WUD', code: '.-- ..- -..' }, { label: 'WX', code: '.-- -..-' }, { label: 'XMTR', code: '-..- -- - .-.' },
+    { label: 'XYL', code: '-..- -.-- .-..' }, { label: 'YL', code: '-.-- .-..' }, { label: '73', code: '--... ...--' },
+    { label: '88', code: '---.. ---..' }, { label: '99', code: '----. ----.' },
+  ] as RefItemLogic[],
+}
