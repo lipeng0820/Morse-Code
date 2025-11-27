@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { DAY_PLANS, MORSE_DICTIONARY } from './constants';
 import { AppMode } from './types';
 import LearningCard from './components/LearningCard';
-import TranslatorMode from './components/TranslatorMode';
+import PracticeMode from './components/PracticeMode';
 import GameMode from './components/GameMode';
-import { Radio, BarChart2, BookOpen, Terminal, Sparkles } from 'lucide-react';
+import ReferenceMode from './components/ReferenceMode';
+import { Radio, BarChart2, BookOpen, Joystick, ChevronRight, CheckCircle2, Library } from 'lucide-react';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.LEARN);
   const [selectedDayId, setSelectedDayId] = useState<number>(1);
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [completedChars, setCompletedChars] = useState<string[]>([]);
-  const [isReviewing, setIsReviewing] = useState(false); // New state for review phase
+  const [isReviewing, setIsReviewing] = useState(false);
 
   // Get current plan data
   const currentPlan = DAY_PLANS.find(d => d.id === selectedDayId) || DAY_PLANS[0];
@@ -28,28 +29,29 @@ const App: React.FC = () => {
     if (currentCharIndex < currentPlan.characters.length - 1) {
       setCurrentCharIndex(prev => prev + 1);
     } else {
-      // End of list, trigger review game
       setIsReviewing(true);
     }
   };
 
+  const handlePrevChar = () => {
+    if (currentCharIndex > 0) {
+      setCurrentCharIndex(prev => prev - 1);
+    }
+  };
+
   const handleGameComplete = () => {
-    // Proceed to next day logic
     const nextDayId = selectedDayId + 1;
     const hasNextDay = DAY_PLANS.some(d => d.id === nextDayId);
     
     if (hasNextDay) {
-        // Direct transition to next day
         setSelectedDayId(nextDayId);
         setCurrentCharIndex(0);
         setIsReviewing(false);
     } else {
-        // End of all days
         setIsReviewing(false);
-        setMode(AppMode.TRANSLATOR);
-        // Small timeout to allow UI to render the change before alerting
+        setMode(AppMode.PRACTICE);
         setTimeout(() => {
-            alert("太棒了！你已经完成了所有课程。去“自由练习场”试试身手吧！");
+            alert("太棒了！你已经完成了所有课程。去“实战演练”试试身手吧！");
         }, 100);
     }
   };
@@ -57,112 +59,130 @@ const App: React.FC = () => {
   const progress = Math.round((completedChars.length / Object.keys(MORSE_DICTIONARY).length) * 100);
 
   return (
-    <div className="min-h-screen bg-morse-bg text-morse-text flex flex-col font-sans selection:bg-morse-accent selection:text-morse-bg">
+    <div className="h-screen bg-morse-bg text-morse-text flex flex-col font-sans overflow-hidden selection:bg-morse-accent selection:text-morse-bg">
       {/* Background Grid Pattern */}
       <div className="fixed inset-0 z-0 opacity-10 pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '40px 40px' }}>
       </div>
 
-      {/* Header */}
-      <header className="border-b border-white/5 bg-morse-bg/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-morse-accent flex items-center justify-center shadow-lg shadow-amber-500/20">
-                <Radio className="text-morse-dark w-6 h-6" />
+      {/* === Primary Header === */}
+      <header className="bg-morse-bg/90 backdrop-blur-md border-b border-white/5 shrink-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+          
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-morse-accent flex items-center justify-center shadow-lg shadow-amber-500/20">
+                <Radio className="text-morse-dark w-5 h-5" />
             </div>
-            <div>
-                <h1 className="font-bold text-lg tracking-tight text-white leading-tight">Morse<span className="text-morse-accent">Mastery</span></h1>
-                <p className="text-[10px] text-morse-muted uppercase tracking-widest font-mono">3-Day Fast Track</p>
+            <div className="hidden sm:block">
+                <h1 className="font-bold text-base tracking-tight text-white leading-tight">Morse<span className="text-morse-accent">Mastery</span></h1>
             </div>
           </div>
+
+          {/* Mode Switcher (Nav) */}
+          <nav className="flex items-center bg-white/5 p-1 rounded-full border border-white/5">
+            <button 
+                onClick={() => setMode(AppMode.LEARN)}
+                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all ${mode === AppMode.LEARN ? 'bg-morse-accent text-morse-dark shadow-sm' : 'text-morse-muted hover:text-white'}`}
+            >
+                <BookOpen size={14} />
+                <span className="hidden sm:inline">学习</span>
+            </button>
+            <button 
+                onClick={() => setMode(AppMode.PRACTICE)}
+                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all ${mode === AppMode.PRACTICE ? 'bg-morse-accent text-morse-dark shadow-sm' : 'text-morse-muted hover:text-white'}`}
+            >
+                <Joystick size={14} />
+                <span className="hidden sm:inline">演练</span>
+            </button>
+            <button 
+                onClick={() => setMode(AppMode.REFERENCE)}
+                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all ${mode === AppMode.REFERENCE ? 'bg-morse-accent text-morse-dark shadow-sm' : 'text-morse-muted hover:text-white'}`}
+            >
+                <Library size={14} />
+                <span className="hidden sm:inline">强化</span>
+            </button>
+          </nav>
           
+          {/* Progress Indicator */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/5">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/5">
                 <BarChart2 size={14} className="text-morse-accent" />
-                <span className="text-xs font-mono text-morse-muted">掌握度: <span className="text-white font-bold">{progress}%</span></span>
+                <span className="text-xs font-mono text-morse-muted">总进度 <span className="text-white font-bold">{progress}%</span></span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col items-center justify-start p-4 md:p-8 relative z-10 w-full max-w-5xl mx-auto">
-        
-        {/* Navigation Tabs */}
-        <div className="flex p-1 bg-morse-card rounded-xl mb-10 border border-white/5 shadow-xl">
-            <button 
-                onClick={() => setMode(AppMode.LEARN)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${mode === AppMode.LEARN ? 'bg-morse-accent text-morse-dark shadow-lg' : 'text-morse-muted hover:text-white'}`}
-            >
-                <BookOpen size={16} />
-                学习模式
-            </button>
-            <button 
-                onClick={() => setMode(AppMode.TRANSLATOR)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${mode === AppMode.TRANSLATOR ? 'bg-morse-accent text-morse-dark shadow-lg' : 'text-morse-muted hover:text-white'}`}
-            >
-                <Terminal size={16} />
-                自由练习场
-            </button>
+      {/* === Secondary Header (Day Selection) - Only in Learn Mode === */}
+      {mode === AppMode.LEARN && (
+        <div className="bg-morse-card/50 border-b border-white/5 shrink-0">
+            <div className="max-w-7xl mx-auto px-4 h-12 flex items-center justify-center sm:justify-start gap-1 overflow-x-auto no-scrollbar">
+                {DAY_PLANS.map(day => {
+                    const isSelected = selectedDayId === day.id;
+                    return (
+                        <button
+                            key={day.id}
+                            onClick={() => {
+                                setSelectedDayId(day.id);
+                                setCurrentCharIndex(0);
+                                setIsReviewing(false);
+                            }}
+                            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+                                isSelected 
+                                ? 'bg-white/10 text-morse-accent ring-1 ring-morse-accent/30' 
+                                : 'text-morse-muted hover:text-white hover:bg-white/5'
+                            }`}
+                        >
+                            <span>Day {day.id}</span>
+                            <span className="opacity-50">|</span>
+                            <span>{day.id === 1 ? '基础' : day.id === 2 ? '进阶' : '精通'}</span>
+                            {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-morse-accent ml-1 animate-pulse" />}
+                        </button>
+                    );
+                })}
+            </div>
         </div>
+      )}
 
+      {/* === Main Content Area === */}
+      <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 relative z-10 w-full flex flex-col items-center">
+        
         {mode === AppMode.LEARN && (
-            <div className="w-full max-w-4xl flex flex-col items-center">
+            <div className="w-full max-w-5xl flex flex-col items-center h-full justify-center min-h-[500px]">
                 
-                {/* Day Selectors */}
-                <div className="grid grid-cols-3 gap-4 w-full max-w-md mb-10">
-                    {DAY_PLANS.map(day => {
-                        const isSelected = selectedDayId === day.id;
-                        return (
-                            <button
-                                key={day.id}
-                                onClick={() => {
-                                    setSelectedDayId(day.id);
-                                    setCurrentCharIndex(0);
-                                    setIsReviewing(false);
-                                }}
-                                className={`relative group flex flex-col items-center p-4 rounded-2xl border transition-all duration-300 ${isSelected ? 'bg-morse-card border-morse-accent ring-1 ring-morse-accent/50 shadow-lg shadow-amber-500/10' : 'bg-morse-card/50 border-white/5 hover:bg-morse-card hover:border-white/10'}`}
-                            >
-                                <span className={`text-xs uppercase tracking-widest font-bold mb-1 ${isSelected ? 'text-morse-accent' : 'text-morse-muted'}`}>Day {day.id}</span>
-                                <span className={`text-sm font-medium ${isSelected ? 'text-white' : 'text-morse-muted'}`}>
-                                    {day.id === 1 ? '基础' : day.id === 2 ? '进阶' : '精通'}
-                                </span>
-                                {isSelected && <div className="absolute -bottom-1 w-8 h-1 bg-morse-accent rounded-full" />}
-                            </button>
-                        );
-                    })}
-                </div>
-
                 {!isReviewing ? (
                     <>
-                        <div className="text-center mb-8 max-w-xl animate-fade-in-up">
-                            <h2 className="text-3xl font-bold text-white mb-3 tracking-tight">{currentPlan.title}</h2>
-                            <p className="text-morse-muted text-sm md:text-base leading-relaxed">{currentPlan.description}</p>
-                        </div>
-
-                        {/* Progress Bar for Current Day */}
-                        <div className="w-full max-w-lg flex items-center gap-3 mb-8">
-                            <span className="text-xs font-mono text-morse-muted">学习进度</span>
-                            <div className="flex-1 bg-white/5 h-2 rounded-full overflow-hidden">
-                                <div 
-                                    className="bg-morse-accent h-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-                                    style={{ width: `${((currentCharIndex) / currentPlan.characters.length) * 100}%` }}
-                                />
-                            </div>
-                            <span className="text-xs font-mono text-morse-muted">{currentCharIndex + 1}/{currentPlan.characters.length}</span>
+                        {/* Day Progress (Compact) */}
+                        <div className="w-full max-w-4xl flex items-center justify-between mb-4 px-2">
+                             <div className="flex flex-col">
+                                <h2 className="text-lg font-bold text-white tracking-tight">{currentPlan.title}</h2>
+                                <p className="text-xs text-morse-muted hidden sm:block">{currentPlan.description}</p>
+                             </div>
+                             <div className="flex items-center gap-3">
+                                <span className="text-xs font-mono text-morse-muted">{currentCharIndex + 1}/{currentPlan.characters.length}</span>
+                                <div className="w-24 sm:w-32 bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                    <div 
+                                        className="bg-morse-accent h-full transition-all duration-500 ease-out"
+                                        style={{ width: `${((currentCharIndex + 1) / currentPlan.characters.length) * 100}%` }}
+                                    />
+                                </div>
+                             </div>
                         </div>
 
                         {/* Main Learning Card */}
-                        <div className="w-full animate-fade-in perspective-1000">
+                        <div className="w-full h-full max-h-[750px] flex items-center justify-center">
                             <LearningCard 
-                                key={currentCharKey} // Force re-render on change
+                                key={currentCharKey} 
                                 charData={currentCharData} 
                                 onNext={handleNextChar} 
+                                onPrev={handlePrevChar}
+                                hasPrev={currentCharIndex > 0}
                             />
                         </div>
                     </>
                 ) : (
-                    <div className="w-full animate-fade-in">
+                    <div className="w-full max-w-lg animate-fade-in mt-10">
                         <GameMode 
                             characters={currentPlan.characters}
                             onComplete={handleGameComplete}
@@ -172,20 +192,19 @@ const App: React.FC = () => {
             </div>
         )}
 
-        {mode === AppMode.TRANSLATOR && (
-            <TranslatorMode />
+        {mode === AppMode.PRACTICE && (
+            <div className="w-full h-full flex items-center justify-center">
+                 <PracticeMode />
+            </div>
+        )}
+
+        {mode === AppMode.REFERENCE && (
+            <div className="w-full h-full flex items-center justify-center">
+                 <ReferenceMode />
+            </div>
         )}
 
       </main>
-
-      {/* Footer */}
-      <footer className="py-8 text-center border-t border-white/5 bg-morse-bg/50">
-        <p className="text-morse-muted text-xs">
-            Visual Mnemonics & Spaced Repetition System
-            <br/>
-            Designed for efficient learning.
-        </p>
-      </footer>
     </div>
   );
 };

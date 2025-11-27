@@ -34,5 +34,19 @@ export interface DayPlan {
 export enum AppMode {
   LEARN = 'LEARN',
   PRACTICE = 'PRACTICE',
-  TRANSLATOR = 'TRANSLATOR',
+  REFERENCE = 'REFERENCE', // New Mode: Knowledge Base
+}
+
+// Practice Mode Specifics
+export enum PracticeType {
+  VISUAL = 'VISUAL', // See code, type letter
+  AUDIO = 'AUDIO',   // Hear code, type letter
+  WORDS = 'WORDS',   // Hear/See word code, type word
+}
+
+export interface PracticeWord {
+  text: string;
+  code: string;
+  category: 'ABBR' | 'COMMON' | 'EMERGENCY';
+  difficulty: 1 | 2 | 3;
 }

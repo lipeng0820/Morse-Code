@@ -5,8 +5,8 @@ export const DAY1_CHARS: Record<string, MorseChar> = {
   'E': { 
     char: 'E', code: '.', type: MorseCharType.LETTER, 
     mnemonic: 'E = Eye (眼睛)', 
-    description: 'E 就像侧脸的一只眼睛。我们只取那炯炯有神的一点(瞳孔)。',
-    visualOverlay: { elements: [{ type: 'dot', x: 45, y: 55}] }
+    description: 'E 一只眼。E，也是“E（一）个点”。',
+    visualOverlay: { elements: [{ type: 'dot', x: 38, y: 54}] }
   },
   'T': { 
     char: 'T', code: '-', type: MorseCharType.LETTER, 
@@ -17,7 +17,7 @@ export const DAY1_CHARS: Record<string, MorseChar> = {
   'I': { 
     char: 'I', code: '..', type: MorseCharType.LETTER, 
     mnemonic: 'I = Ice (冰)', 
-    description: 'I 像一根冰柱，上下两端各凝结着一滴冰珠。',
+    description: 'I 像一根冰柱，上下两端各凝结着一滴冰珠。冰块融化，“哒哒”落下两滴水。',
     visualOverlay: { elements: [{ type: 'dot', x: 50, y: 30 }, { type: 'dot', x: 50, y: 80 }] }
   },
   'M': { 
@@ -34,15 +34,15 @@ export const DAY1_CHARS: Record<string, MorseChar> = {
   },
   'N': { 
     char: 'N', code: '-.', type: MorseCharType.LETTER, 
-    mnemonic: 'N = Night (夜空)', 
-    description: '漫长的黑夜(长划)，最后亮起了一颗星(点)。',
+    mnemonic: 'N = Notification (通知中心)', 
+    description: '（-·）仔细看像不像iPhone的刘海屏通知中心状态，-是通知栏，·是摄像头的位置。',
     visualOverlay: { elements: [{ type: 'dash', x: 30, y: 50, rotation: 90 }, { type: 'dot', x: 70, y: 80 }] }
   },
   'O': { 
     char: 'O', code: '---', type: MorseCharType.LETTER, 
     mnemonic: 'O = Oh-My-God (惊叹)', 
     description: '发音 O—M—G—，三个惊讶的长音节，嘴巴张得圆圆的。',
-    visualOverlay: { elements: [{ type: 'dash', x: 12, y: 50, rotation: 90 }, { type: 'dash', x: 50, y: 12 }, { type: 'dash', x: 88, y: 50, rotation: 90 }] }
+    visualOverlay: { elements: [{ type: 'dash', x: 28, y: 57, rotation: 90 }, { type: 'dash', x: 50, y: 28 }, { type: 'dash', x: 72, y: 57, rotation: 90 }] }
   },
   'S': { 
     char: 'S', code: '...', type: MorseCharType.LETTER, 
