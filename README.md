@@ -1,5 +1,7 @@
 # 摩斯密码 3日通 | MorseMastery
 
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+CiAgPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSIyMCIgZmlsbD0iI0Y1OUUwQiIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBzdHJva2U9IiMwMjA2MTciIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjEyIiBmaWxsPSIjMDIwNjE3Ii8+CiAgPHJlY3QgeD0iMjAiIHk9IjQ2IiB3aWR0aD0iMjAiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiMwMjA2MTciLz4KICA8cmVjdCB4PSI2MCIgeT0iNDYiIHdpZHRoPSIyMCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iIzAyMDYxNyIvPgo8L3N2Zz4=" alt="MorseMastery Logo" width="100" height="100" align="right" />
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB)](https://reactjs.org/)
 [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -15,15 +17,26 @@
 ### 项目简介
 **摩斯密码 3日通 (MorseMastery)** 是一款专为中文用户设计的科学摩斯密码学习工具。
 
-我们抛弃了枯燥的死记硬背，采用 **视觉图像叠加 (Visual Mnemonics)**、**听觉节奏强化** 和 **游戏化演练**，帮助你在 **3天** 内建立起字符与“点(.)”、“划(-)”之间的直觉反射。最新版本已支持 **中英双语切换** 及 **AI 智能助记**。
+我们抛弃了枯燥的死记硬背，采用 **视觉图像叠加 (Visual Mnemonics)**、**听觉节奏强化** 和 **游戏化演练**，帮助你在 **3天** 内建立起字符与“点(.)”、“划(-)”之间的直觉反射。
 
-### 核心功能
+### 🌟 核心亮点：AI 智能记忆助手
+
+> **"记不住？让 AI 给你讲个故事。"**
+
+这是本项目最独特的创新功能。摩斯密码本质上是一种抽象符号，初学者最大的痛点是**"记不住"**或**"容易混"**。
+
+我们集成了 **Google Gemini** 大模型，将“被动记忆”转变为“主动联想”：
+
+1.  **用户参与**：当你对某个字符（如 `Q: --.-`）感到难以记忆时，告诉 AI 你的联想线索（例如："Q 像气球" 或 "Queen"）。
+2.  **AI 生成**：AI 会结合摩斯码的点划特征与你的线索，即时生成一个生动、逻辑自洽的助记故事（例如："God Save The Queen" 的节奏 `Da-Da-Di-Da`）。
+3.  **强化记忆**：通过这种"自己参与构建"的知识，大脑的神经链接将更加牢固，实现过目不忘。
+
+### 核心功能模块
 
 #### 1. 三日通关课程 (Learn)
 *   **Day 1 基础信号**：从最简单的对称图形入手（如 E=Eye, T=Table, M=Ma-Ma），建立信心。
 *   **Day 2 进阶逻辑**：学习与形状强关联的字符（如 D=Door/门, K=Kangaroo/袋鼠, W=Waves/波浪）。
 *   **Day 3 精通复杂**：攻克最难记忆的字符，使用独特的中文节奏助记（如 C=吹呀吹呀, Q=气球/Qi-Qiu）。
-*   **AI 记忆助手**：记不住？告诉 AI 你的联想线索，它会为你生成专属的助记故事，并支持替换系统默认助记。
 
 #### 2. 实战演练场 (Practice)
 *   **视觉瞬记**：训练眼睛看到符号瞬间反应出字母的能力。
@@ -77,35 +90,39 @@
 ### Project Overview
 **MorseMastery** is a scientifically designed, gamified web application aimed at helping users master Morse Code in just **3 days**. 
 
-Unlike traditional rote memorization tools, MorseMastery leverages **Visual Mnemonics** (superimposing Morse codes onto letter shapes), **Auditory Reinforcement** (rhythm training), and **Game-based Drills** to create strong neural links. Now featuring **Bilingual Support** and **AI Assistance**.
+We leverage **Visual Mnemonics** (superimposing codes on letters), **Auditory Reinforcement**, and **Gamified Drills** to build intuitive reflexes.
+
+### 🌟 Feature Highlight: AI Memory Assistant
+
+> **"Can't remember? Let AI tell you a story."**
+
+Abstract dots and dashes are hard to memorize. We integrated **Google Gemini** to transform rote memorization into **Active Association**:
+
+1.  **Input Context**: Stuck on a character? Give the AI a clue (e.g., "H looks like a House").
+2.  **AI Generation**: The AI generates a custom mnemonic story that mathematically fits the Morse pattern (e.g., "Four corners of a house = 4 dots").
+3.  **Memory Reinforcement**: By participating in the creation of the mnemonic, your brain creates stronger neural pathways.
 
 ### Key Features
 
-#### 1. The 3-Day Learning Curriculum
-*   **Day 1: Basics & Symmetry**: Learn simple symmetrical letters (E, T, I, M, A, N, O, S, H) using high-contrast visual anchors.
-*   **Day 2: Visual Logic**: Master letters with strong shape correlations (e.g., D=Door, K=Kangaroo, W=Waves).
-*   **Day 3: Complex Mastery**: Tackle the hardest characters using rhythmic mnemonics (e.g., Q=Qi-Qiu/Balloon, F=Flag).
-*   **AI Memory Assistant**: Can't remember a character? Give the AI a clue, and it will generate a custom mnemonic story for you.
+#### 1. The 3-Day Curriculum
+*   **Day 1: Basics**: Simple symmetrical shapes (E, T, M).
+*   **Day 2: Visual Logic**: Shape-correlated characters (D=Door, W=Waves).
+*   **Day 3: Mastery**: Complex rhythmic characters (Q=God Save The Queen).
 
-#### 2. Practice Arena (Gamified)
-*   **Sight Reflex**: Flashcard style training to associate visual shapes with characters instantly.
-*   **Audio Intercept**: The core skill of a radioman. Listen to the beep pattern and identify the character.
-*   **Code Cracking**: Decipher full words, including 100+ high-frequency words and abbreviations (SOS, CQ, THE).
-*   **Ranking System**: Progress from "Trainee" to "Ace Operator" based on your score streaks.
+#### 2. Practice Arena
+*   **Sight Reflex**: Flashcard training.
+*   **Audio Intercept**: Identify characters by ear (The core radioman skill).
+*   **Code Cracker**: Decipher real words and abbreviations (SOS, CQ).
+*   **Ranking System**: Climb from "Trainee" to "Ace Operator".
 
-#### 3. Reference & Knowledge Base
-*   **Interactive Dictionary**: Full list of Numbers (1-0), Punctuation, and Prosigns.
-*   **Abbreviation Library**: A comprehensive list of Q-Codes (QTH, QSL) and Chat Abbreviations (73, TNX) used in real Amateur Radio (CW).
-*   **SVG Visualization**: All Morse codes are rendered as precise geometric shapes.
+#### 3. Reference Library
+*   **Interactive Dictionary**: Numbers, Punctuation, and Prosigns.
+*   **Abbreviation List**: Comprehensive list of Amateur Radio Q-Codes and abbreviations.
+*   **SVG Visualization**: Precise geometric rendering of all codes.
 
-### Architecture & Localization
-The project uses a **Separation of Concerns** architecture for data handling:
-
-*   **Logic (`data/visual_config.ts`)**: Stores immutable data like Morse codes, SVG coordinates, and types.
-*   **Content (`locales/*.ts`)**: Stores all UI text, mnemonics, and descriptions.
-    *   `locales/zh.ts`: Chinese content.
-    *   `locales/en.ts`: English content.
-*   **Maintenance**: To update text or add a language, you only need to modify the files in the `locales` folder.
+### Architecture
+*   **Logic (`data/visual_config.ts`)**: Immutable Morse logic.
+*   **Content (`locales/*.ts`)**: All UI text and mnemonics.
 
 ### Getting Started
 
@@ -121,7 +138,7 @@ The project uses a **Separation of Concerns** architecture for data handling:
     ```
 
 3.  **Configure Environment (Optional)**
-    To enable AI features, create a `.env` file in the root directory:
+    To enable AI features, create a `.env` file:
     ```env
     VITE_API_KEY=your_google_gemini_api_key
     ```
