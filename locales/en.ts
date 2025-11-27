@@ -103,7 +103,7 @@ export const EN_CONTENT = {
     'H': { mnemonic: 'H = Huts', description: 'Four dots (....) representing the four corners of a hut.' },
     // Day 2
     'D': { mnemonic: 'D = Dog', description: 'One dash for the body (-), two dots for the running paws (..).' },
-    'K': { mnemonic: 'K = Kangaroo', description: '"Kan-ga-roo" starts with "K" and matches the -.- pattern. Visually, the middle dot (.) represents the kangaroo`s nose, and the two dashes "(-)" on either side represent its whiskers.' },
+    'K': { mnemonic: 'K = Kangaroo', description: '(-.-) Long back, pouch in the middle, long tail.' },
     'R': { mnemonic: 'R = Racecar', description: '(.-.) Dot (headlight), Dash (chassis), Dot (headlight).' },
     'U': { mnemonic: 'U = Uniform', description: '(..-) Two buttons on the chest, one long belt.' },
     'W': { mnemonic: 'W = Waves', description: '(.--) A small ripple followed by two big waves.' },

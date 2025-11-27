@@ -103,7 +103,7 @@ export const ZH_CONTENT = {
     'H': { mnemonic: 'H = Hahahaha (哈哈哈哈)', description: '“H”的发音与“哈（ha）”关联。“哈哈哈哈”恰好是四个短促的音节，每个“哈”字都代表摩斯密码中的一个“点”（.）。' },
     // Day 2
     'D': { mnemonic: 'D = Door (门)', description: '听声音像敲门：咚(长)—哒(短)哒(短)。视觉上：左侧-是门把手，右侧两点分别是锁孔(·)和转轴(·)。' },
-    'K': { mnemonic: 'K = Kàn (看)', description: '看（Kàn）-·-像是一个带着眼镜的鼻子' },
+    'K': { mnemonic: 'K = Kangaroo (袋鼠)', description: '发音 Kan-ga-roo (—·—)。视觉上：K 像站立的袋鼠。同时 -·- 中间的点是袋鼠的鼻子，两边-是袋鼠的胡须。' },
     'R': { mnemonic: 'R = Racecar (赛车)', description: 'R 是一辆赛车正面的特写。视觉结构对称：左边车灯(·)，中间进气格栅(—)，右边车灯(·)。' },
     'U': { mnemonic: 'U = Uncle Wang的UU球', description: '视觉上：U形大脸，上面两只眼睛(··)下面一张阔嘴(—)。同时 ··-也可以记作“悠悠uu球～”' },
     'W': { mnemonic: 'W = Waves (波浪)', description: 'W 就是波浪的形状。左边起势一个小浪花(·)，紧接着涌起两道大浪(——)。' },

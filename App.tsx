@@ -193,7 +193,7 @@ const App: React.FC = () => {
                   
                   {!isReviewing ? (
                       <>
-                          {/* Day Progress (Compact) */}
+                          {/* Day Progress (Interactive) */}
                           <div className="w-full max-w-4xl flex items-center justify-between mb-4 px-2">
                               <div className="flex flex-col">
                                   <h2 className="text-lg font-bold text-white tracking-tight">{currentPlan.title}</h2>
@@ -201,11 +201,36 @@ const App: React.FC = () => {
                               </div>
                               <div className="flex items-center gap-3">
                                   <span className="text-xs font-mono text-morse-muted">{currentCharIndex + 1}/{currentPlan.characters.length}</span>
-                                  <div className="w-24 sm:w-32 bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                      <div 
-                                          className="bg-morse-accent h-full transition-all duration-500 ease-out"
-                                          style={{ width: `${((currentCharIndex + 1) / currentPlan.characters.length) * 100}%` }}
-                                      />
+                                  
+                                  {/* Interactive Segmented Progress Bar */}
+                                  <div className="flex items-center gap-1 h-2 w-32 sm:w-48">
+                                    {currentPlan.characters.map((char, idx) => {
+                                        const isPast = idx < currentCharIndex;
+                                        const isCurrent = idx === currentCharIndex;
+                                        return (
+                                            <button
+                                                key={char}
+                                                onClick={() => {
+                                                    setCurrentCharIndex(idx);
+                                                    setIsReviewing(false);
+                                                }}
+                                                className={`relative group h-full flex-1 rounded-full transition-all duration-300 ${
+                                                    isCurrent ? 'bg-morse-accent shadow-[0_0_8px_rgba(245,158,11,0.6)] scale-y-125' : 
+                                                    isPast ? 'bg-morse-accent/40 hover:bg-morse-accent/60' : 
+                                                    'bg-white/10 hover:bg-white/20'
+                                                }`}
+                                            >
+                                                {/* Tooltip on Hover */}
+                                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none transform translate-y-1 group-hover:translate-y-0 z-20">
+                                                    <div className="bg-morse-dark text-morse-accent text-xs font-bold px-2 py-1 rounded border border-morse-accent/20 shadow-xl relative">
+                                                        {char}
+                                                        {/* Arrow */}
+                                                        <div className="w-1.5 h-1.5 bg-morse-dark border-r border-b border-morse-accent/20 transform rotate-45 absolute left-1/2 -translate-x-1/2 -bottom-0.5"></div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        )
+                                    })}
                                   </div>
                               </div>
                           </div>
