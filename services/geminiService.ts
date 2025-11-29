@@ -3,7 +3,13 @@ import { GoogleGenAI } from "@google/genai";
 import { MorseChar, Language } from "../types";
 
 const initGenAI = () => {
-  const apiKey = process.env.API_KEY;
+  // Priority: 1. User LocalStorage Key 2. Env Variable Key
+  const userKey = localStorage.getItem('user_gemini_key');
+  // Use process.env.API_KEY as per coding guidelines and to fix ImportMeta type error
+  const envKey = process.env.API_KEY;
+  
+  const apiKey = userKey || envKey;
+
   if (!apiKey) {
     return null;
   }
@@ -50,8 +56,10 @@ export const getCreativeMnemonic = async (
       { "mnemonic": "...", "description": "..." }
     `;
 
+    // Using gemini-2.5-flash as default, but if user provides key they might expect access to others.
+    // However, 2.5-flash is best for this latency-sensitive task.
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash", 
       contents: prompt,
       config: {
         responseMimeType: "application/json"
@@ -66,9 +74,13 @@ export const getCreativeMnemonic = async (
 
   } catch (error: any) {
     console.warn("Gemini API error:", error.message);
+    const isQuotaError = error.message?.includes('429') || error.message?.includes('quota');
+    
     return {
         mnemonic: fallback.mnemonic,
-        description: `${lang === 'zh' ? '(AI 额度耗尽或解析错误) ' : '(AI Error) '} ${char.description}`
+        description: isQuotaError 
+          ? (lang === 'zh' ? '(AI 额度耗尽, 请尝试在设置中配置自定义 Key) ' : '(Quota Exceeded, try setting custom Key) ') + char.description
+          : `${lang === 'zh' ? '(AI 错误) ' : '(AI Error) '} ${char.description}`
     };
   }
 };

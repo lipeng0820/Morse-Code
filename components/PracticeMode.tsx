@@ -364,12 +364,12 @@ const PracticeMode: React.FC = () => {
           </div>
        </div>
 
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           
           {/* Card 1 */}
           <button 
              onClick={() => startGame(PracticeType.VISUAL)}
-             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col"
+             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col min-h-[260px]"
           >
              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4 group-hover:bg-blue-500/20 transition-colors">
                 <Eye className="text-blue-400" />
@@ -386,7 +386,7 @@ const PracticeMode: React.FC = () => {
           {/* Card 2 */}
           <button 
              onClick={() => startGame(PracticeType.AUDIO)}
-             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col"
+             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col min-h-[260px]"
           >
              <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center mb-4 group-hover:bg-green-500/20 transition-colors">
                 <Volume2 className="text-green-400" />
@@ -404,7 +404,7 @@ const PracticeMode: React.FC = () => {
           {/* Card 3 */}
           <button 
              onClick={() => startGame(PracticeType.WORDS)}
-             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col"
+             className="group bg-morse-card/80 hover:bg-morse-card border border-white/5 hover:border-morse-accent/30 rounded-2xl p-6 text-left transition-all hover:-translate-y-1 shadow-xl flex flex-col min-h-[260px]"
           >
              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
                 <Keyboard className="text-purple-400" />

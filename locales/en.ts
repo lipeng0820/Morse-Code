@@ -35,6 +35,11 @@ export const EN_CONTENT = {
       ai_btn_replace: 'Replace Above',
       ai_btn_restore: 'Restore Default',
       ai_loading: 'AI is thinking...',
+      ai_settings_title: 'API Configuration',
+      ai_key_placeholder: 'Enter Google Gemini API Key...',
+      ai_key_help: 'Uses system key by default. Enter your own key for higher quotas. Stored locally.',
+      ai_btn_save: 'Save Config',
+      ai_btn_clear: 'Reset to Default',
       next: 'Next',
       prev: 'Previous',
       play_sound: 'Play Sound'

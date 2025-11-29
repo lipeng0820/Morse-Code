@@ -35,6 +35,11 @@ export const ZH_CONTENT = {
       ai_btn_replace: '替换上方助记',
       ai_btn_restore: '恢复系统默认',
       ai_loading: 'AI 正在头脑风暴...',
+      ai_settings_title: '配置 API Key',
+      ai_key_placeholder: '输入 Google Gemini API Key...',
+      ai_key_help: '默认使用系统共享 Key。填入你的 Key 可获得更高配额和速度。仅存储在本地浏览器。',
+      ai_btn_save: '保存配置',
+      ai_btn_clear: '恢复默认',
       next: '下一个',
       prev: '上一个',
       play_sound: '播放声音'

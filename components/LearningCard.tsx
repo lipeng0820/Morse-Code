@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { MorseChar, CharContent } from '../types';
 import { morseAudio } from '../utils/audioUtils';
 import VisualMnemonic from './VisualMnemonic';
-import { Volume2, ArrowRight, RotateCcw, Lightbulb, Sparkles, ArrowLeft, RefreshCw, Undo2, Check } from 'lucide-react';
+import { Volume2, ArrowRight, RotateCcw, Lightbulb, Sparkles, ArrowLeft, RefreshCw, Undo2, Check, Settings, Save, Trash2 } from 'lucide-react';
 import { getCreativeMnemonic } from '../services/geminiService';
 import { LanguageContext } from '../App';
 
@@ -24,6 +24,10 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
   const [loadingAi, setLoadingAi] = useState(false);
   const [isReplaced, setIsReplaced] = useState(false);
   
+  // AI Settings State
+  const [showSettings, setShowSettings] = useState(false);
+  const [customApiKey, setCustomApiKey] = useState('');
+
   const { ui, lang } = useContext(LanguageContext);
 
   // Parse code length for visualization sync
@@ -33,6 +37,26 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
   const displayData = isReplaced && generatedResult 
     ? { ...charData, ...generatedResult } 
     : charData;
+
+  useEffect(() => {
+    // Load stored key on mount
+    const storedKey = localStorage.getItem('user_gemini_key');
+    if (storedKey) setCustomApiKey(storedKey);
+  }, []);
+
+  const handleSaveKey = () => {
+    if (customApiKey.trim()) {
+      localStorage.setItem('user_gemini_key', customApiKey.trim());
+      setShowSettings(false);
+      alert(lang === 'zh' ? 'API Key 已保存' : 'API Key Saved');
+    }
+  };
+
+  const handleClearKey = () => {
+    localStorage.removeItem('user_gemini_key');
+    setCustomApiKey('');
+    alert(lang === 'zh' ? '已恢复系统默认 Key' : 'Reset to System Default Key');
+  };
 
   const handlePlay = async () => {
     if (isPlaying) return;
@@ -72,6 +96,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
     setLoadingAi(false);
     setActiveIndex(-1);
     setIsPlaying(false);
+    setShowSettings(false);
     
     // Auto-play hint on mount
     const timer = setTimeout(() => {
@@ -168,12 +193,44 @@ const LearningCard: React.FC<LearningCardProps> = ({ charData, onNext, onPrev, h
             </div>
 
             {/* AI Assistant Section */}
-            <div className="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3 text-indigo-300">
-                    <Lightbulb size={16} />
-                    <span className="text-xs font-bold uppercase tracking-wider">{ui.card.ai_title}</span>
+            <div className="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-4 relative">
+                <div className="flex items-center justify-between mb-3">
+                     <div className="flex items-center gap-2 text-indigo-300">
+                        <Lightbulb size={16} />
+                        <span className="text-xs font-bold uppercase tracking-wider">{ui.card.ai_title}</span>
+                    </div>
+                    <button 
+                      onClick={() => setShowSettings(!showSettings)}
+                      className={`p-1 rounded hover:bg-white/10 transition-colors ${showSettings ? 'text-indigo-200' : 'text-indigo-400/50'}`}
+                      title="API Settings"
+                    >
+                      <Settings size={14} />
+                    </button>
                 </div>
                 
+                {/* AI Settings Panel */}
+                {showSettings && (
+                   <div className="mb-4 bg-black/40 p-3 rounded-lg border border-indigo-500/30 animate-fade-in">
+                      <div className="text-[10px] text-indigo-300 mb-2 font-bold">{ui.card.ai_settings_title}</div>
+                      <input 
+                         type="password"
+                         value={customApiKey}
+                         onChange={(e) => setCustomApiKey(e.target.value)}
+                         placeholder={ui.card.ai_key_placeholder}
+                         className="w-full bg-black/30 text-xs text-white p-2 rounded border border-white/10 focus:border-indigo-500 outline-none mb-2"
+                      />
+                      <p className="text-[10px] text-morse-muted mb-2">{ui.card.ai_key_help}</p>
+                      <div className="flex gap-2">
+                         <button onClick={handleSaveKey} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] py-1 rounded flex items-center justify-center gap-1">
+                            <Save size={10} /> {ui.card.ai_btn_save}
+                         </button>
+                         <button onClick={handleClearKey} className="flex-1 bg-white/5 hover:bg-white/10 text-white text-[10px] py-1 rounded flex items-center justify-center gap-1">
+                            <Trash2 size={10} /> {ui.card.ai_btn_clear}
+                         </button>
+                      </div>
+                   </div>
+                )}
+
                 <div className="flex gap-2 mb-3">
                     <input 
                         type="text" 
